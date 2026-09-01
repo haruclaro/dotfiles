@@ -1,0 +1,13 @@
+[meta]
+version = 1
+name = "doomer"
+variant = "dark"
+inherits = "vicinae-dark"
+[colors.core]
+background = "#0D0D11"
+foreground = "#A0A8B7"
+secondary_background = "#16161F"
+border = "#282934"
+accent = "#5E677A"
+[colors.accents]
+red = "#5C3F3F"

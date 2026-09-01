@@ -1,0 +1,13 @@
+[meta]
+version = 1
+name = "pink-tiger"
+variant = "dark"
+inherits = "vicinae-dark"
+[colors.core]
+background = "#BE0297"
+foreground = "#FFFFFF"
+secondary_background = "#AF0D71"
+border = "#FD0CFD"
+accent = "#9E17FD"
+[colors.accents]
+red = "#FD46DA"

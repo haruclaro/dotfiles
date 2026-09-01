@@ -1,0 +1,13 @@
+[meta]
+version = 1
+name = "retro"
+variant = "dark"
+inherits = "vicinae-dark"
+[colors.core]
+background = "#1E1726"
+foreground = "#E2DCE8"
+secondary_background = "#2B2135"
+border = "#514064"
+accent = "#9A7BB5"
+[colors.accents]
+red = "#7BB59A"

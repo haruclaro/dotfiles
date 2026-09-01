@@ -1,0 +1,13 @@
+[meta]
+version = 1
+name = "pick-me-up"
+variant = "dark"
+inherits = "vicinae-dark"
+[colors.core]
+background = "#FDB1ED"
+foreground = "#F7F3F6"
+secondary_background = "#FEADDF"
+border = "#FD83FD"
+accent = "#BB86FC"
+[colors.accents]
+red = "#FE7AE5"

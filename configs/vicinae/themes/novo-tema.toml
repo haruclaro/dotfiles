@@ -1,0 +1,13 @@
+[meta]
+version = 1
+name = "novo-tema"
+variant = "dark"
+inherits = "vicinae-dark"
+[colors.core]
+background = "#BE0297"
+foreground = "#FFFFFF"
+secondary_background = "#AE026C"
+border = "#FD0CFD"
+accent = "#294DF6"
+[colors.accents]
+red = "#46CAFD"

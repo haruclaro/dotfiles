@@ -1,0 +1,23 @@
+# Configuração Principal do Ghostty Terminal Emulator
+
+# Shell padrão (Fish shell já possui sugestões em tempo real por padrão)
+command = /usr/bin/fish
+
+# Fonte
+font-family = "monospace"
+font-size = 12
+
+# Estilo e espaçamento da janela
+window-padding-x = 10
+window-padding-y = 10
+window-decoration = true
+
+# Integração com o Shell
+shell-integration = detect
+
+# Cursor
+cursor-style = block
+cursor-style-blink = true
+
+theme = doomer
+theme = doomer

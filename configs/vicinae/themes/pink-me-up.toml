@@ -1,0 +1,13 @@
+[meta]
+version = 1
+name = "pink-me-up"
+variant = "dark"
+inherits = "vicinae-dark"
+[colors.core]
+background = "#FEBBF0"
+foreground = "#000000"
+secondary_background = "#f49ad2"
+border = "#F446F4"
+accent = "#DF7EFD"
+[colors.accents]
+red = "#BD79F8"
