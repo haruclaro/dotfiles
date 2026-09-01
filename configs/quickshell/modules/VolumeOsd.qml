@@ -24,12 +24,7 @@ PanelWindow {
     focusable: false
     color: "transparent"
 
-    opacity: osdTimer.running ? 1 : 0
-    visible: opacity > 0
-
-    Behavior on opacity {
-        NumberAnimation { duration: 200 }
-    }
+    visible: container.opacity > 0
 
     // Monitorar Pipewire Audio Sink
     property var audioNode: Pipewire.defaultAudioSink
@@ -73,7 +68,12 @@ PanelWindow {
     }
 
     Rectangle {
+        id: container
         anchors.fill: parent
+        opacity: osdTimer.running ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation { duration: 200 }
+        }
         radius: 12
         color: Cfg.Colors.bgElevated
         border.color: Cfg.Colors.border
