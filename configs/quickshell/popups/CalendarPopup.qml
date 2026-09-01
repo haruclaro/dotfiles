@@ -52,6 +52,8 @@ Item {
 
         RowLayout {
             Layout.fillWidth: true
+            Layout.leftMargin: 20
+            Layout.rightMargin: 20
 
             Rectangle {
                 width: 22; height: 22; radius: Cfg.Config.chipRadius; color: "transparent"
