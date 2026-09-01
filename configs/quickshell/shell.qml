@@ -37,4 +37,7 @@ ShellRoot {
 
     // Toast de notificações (substitui o dunst)
     Modules.NotificationToast {}
+
+    // OSD de Volume (estilo Windows)
+    Modules.VolumeOsd {}
 }
