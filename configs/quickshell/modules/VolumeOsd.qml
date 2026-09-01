@@ -11,6 +11,7 @@ PanelWindow {
 
     // Posição tipo Windows (centro-baixo)
     anchors.bottom: true
+    exclusiveZone: 0
     margins.bottom: 60
 
     implicitWidth: 260
