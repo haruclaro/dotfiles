@@ -41,8 +41,8 @@ PanelWindow {
     }
 
     // Usar onVolumeChanged e onMutedChanged para reiniciar o timer e mostrar o popup
-    onCurrentVolumeChanged: SvcTimerHelper.trigger()
-    onCurrentMutedChanged: SvcTimerHelper.trigger()
+    onCurrentVolumeChanged: svcTimerHelper.trigger()
+    onCurrentMutedChanged: svcTimerHelper.trigger()
 
     // Atraso curto para não mostrar popup na inicialização
     property bool _initialized: false
@@ -58,7 +58,7 @@ PanelWindow {
     }
 
     QtObject {
-        id: SvcTimerHelper
+        id: svcTimerHelper
         function trigger() {
             if (root._initialized) {
                 osdTimer.restart()
