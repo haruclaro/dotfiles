@@ -15,7 +15,7 @@ fi
 VOLUME_INFO=$(wpctl get-volume @DEFAULT_AUDIO_SINK@)
 
 if echo "$VOLUME_INFO" | grep -q "MUTED"; then
-    notify-send -h string:x-canonical-private-synchronous:sys-notify -a "Volume" -u low -i audio-volume-muted "Mutado" "0%" -h int:value:0
+    notify-send -r 2593 -a "Volume" -u low -i audio-volume-muted "Mutado" "0%" -h int:value:0
 else
     # Parse volume (e.g. "Volume: 0.75" -> 75)
     VOLUME_PERCENT=$(echo "$VOLUME_INFO" | awk '{print int($2 * 100)}')
@@ -29,5 +29,5 @@ else
         ICON="audio-volume-medium"
     fi
 
-    notify-send -h string:x-canonical-private-synchronous:sys-notify -a "Volume" -u low -i "$ICON" "Volume" "${VOLUME_PERCENT}%" -h int:value:"$VOLUME_PERCENT"
+    notify-send -r 2593 -a "Volume" -u low -i "$ICON" "Volume" "${VOLUME_PERCENT}%" -h int:value:"$VOLUME_PERCENT"
 fi
