@@ -30,12 +30,12 @@ fi
 
 # 3. Install required packages
 echo "Installing official packages..."
-sudo pacman -S --needed --noconfirm discord kdenlive solaar fish plymouth sddm thunar
+sudo pacman -S --needed --noconfirm discord kdenlive solaar fish plymouth sddm thunar networkmanager network-manager-applet nm-connection-editor bluez bluez-utils blueman linux-headers
 
 echo "Installing AUR packages..."
 # Note: foundryvtt requires the license and zip file. It is omitted from the automated list to prevent failure.
 # Note: Radmin VPN is not natively available on Linux. Consider alternatives like ZeroTier or Tailscale, or the community wine script (radmin-vpn-linux).
-yay -S --needed --noconfirm stremio-enhanced-bin zen-browser-bin spotify vicinae-bin ghostty-git quickshell-git
+yay -S --needed --noconfirm stremio-enhanced-bin zen-browser-bin spotify vicinae-bin ghostty-git quickshell-git xpadneo-dkms-git
 
 # 4. Restore user dotfiles
 echo "Restoring user configurations..."
@@ -103,6 +103,10 @@ if [ -d "$SYSTEM_DIR/sddm" ]; then
     # Enable SDDM service if not enabled
     sudo systemctl enable sddm.service
 fi
+
+echo "Enabling Network and Bluetooth services..."
+sudo systemctl enable NetworkManager.service
+sudo systemctl enable bluetooth.service
 
 echo "========================================="
 echo " Setup complete! "
