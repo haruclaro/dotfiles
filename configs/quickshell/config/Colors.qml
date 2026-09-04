@@ -21,24 +21,25 @@ import Quickshell.Io
 QtObject {
     id: root
 
+    property var themeJson: null
+
+    function loadTheme(txt) {
+        if (!txt) return
+        try {
+            let parsed = JSON.parse(txt)
+            if (parsed && typeof parsed === "object") {
+                root.themeJson = parsed
+            }
+        } catch(e) {}
+    }
+
     property FileView themeFile: FileView {
         path: Qt.resolvedUrl("../theme-colors.json")
         watchChanges: true
         blockLoading: true
         printErrors: false
-    }
-
-    property var themeJson: {
-        try {
-            let txt = themeFile.text()
-            if (txt) {
-                let parsed = JSON.parse(txt)
-                if (parsed && typeof parsed === "object") {
-                    return parsed
-                }
-            }
-        } catch(e) {}
-        return null
+        onLoaded: root.loadTheme(text())
+        onFileChanged: root.loadTheme(text())
     }
 
     // "fundo/superficie/base/destaque1/destaque2/texto" são os nomes que
