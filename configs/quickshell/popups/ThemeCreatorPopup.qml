@@ -62,9 +62,14 @@ Item {
         return root.wallpaperCandidates.filter(path => path.substring(path.lastIndexOf('/') + 1).toLowerCase().includes(filter))
     }
 
+    signal themeSaved()
+
     Process {
         id: applyProc
-        onExited: (code) => { root.applyResult = code === 0 ? "Tema aplicado e salvo!" : "Falha ao aplicar (código " + code + ")" }
+        onExited: (code) => { 
+            root.applyResult = code === 0 ? "Tema aplicado e salvo!" : "Falha ao aplicar (código " + code + ")"
+            if (code === 0) root.themeSaved()
+        }
     }
     property string applyResult: ""
 

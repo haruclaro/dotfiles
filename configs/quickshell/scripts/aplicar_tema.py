@@ -39,7 +39,7 @@ with open(PATHS["quickshell"], "w") as f:
 with open(PATHS["hypr_colors"], "w") as f:
     f.write(f"$fundo = rgb({fundo})\n$superficie = rgb({superficie})\n$base = rgb({base})\n$destaque1 = rgb({destaque1})\n$destaque2 = rgb({destaque2})\n$texto = rgb({texto})\n")
 
-with open(PATHS["hypr_colors"].replace(".conf", ".lua"), "w") as f:
+with open(PATHS["hypr_colors"][:-5] + ".lua", "w") as f:
     f.write(f'return {{\n    fundo = "0xff{fundo}",\n    superficie = "0xff{superficie}",\n    base = "0xff{base}",\n    destaque1 = "0xff{destaque1}",\n    destaque2 = "0xff{destaque2}",\n    texto = "0xff{texto}"\n}}\n')
 
 # 3. Hyprpaper

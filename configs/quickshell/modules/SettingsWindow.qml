@@ -353,6 +353,7 @@ Window {
                                 id: themeCreator
                                 anchors.fill: parent
                                 anchors.margins: 16
+                                onThemeSaved: stack.currentIndex = 0
                             }
                         }
                     }
