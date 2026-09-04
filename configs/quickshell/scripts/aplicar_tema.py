@@ -104,8 +104,7 @@ with open(PATHS["gtk3"], "w") as f:
     f.write(f"@define-color theme_bg_color #{fundo};\n@define-color theme_fg_color #{texto};\n@define-color theme_base_color #{superficie};\n@define-color theme_text_color #{texto};\n@define-color theme_selected_bg_color #{destaque1};\nwindow, dialog, notebook {{ background-color: @theme_bg_color; color: @theme_fg_color; }}\n")
 
 # Reloads
-subprocess.run(["killall", "hyprpaper"], capture_output=True, check=False)
-subprocess.Popen(["hyprpaper"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+subprocess.run(["hyprctl", "hyprpaper", "wallpaper", f",{wall}"], capture_output=True, check=False)
 subprocess.run(["killall", "-USR1", "kitty"], capture_output=True, check=False)
 subprocess.run(["hyprctl", "dispatch", "sendshortcut", "CTRL SHIFT,comma,class:com.mitchellh.ghostty"], capture_output=True, check=False)
 subprocess.run(["killall", "thunar"], capture_output=True, check=False)
