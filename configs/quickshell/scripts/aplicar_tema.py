@@ -41,7 +41,7 @@ with open(PATHS["hypr_colors"], "w") as f:
 
 # 3. Hyprpaper
 with open(PATHS["hyprpaper"], "w") as f:
-    f.write(f"preload = {wall}\nwallpaper = HDMI-A-1,{wall}\nwallpaper = DP-1,{wall}\nsplash = false\n")
+    f.write(f"preload = {wall}\nwallpaper = ,{wall}\nsplash = false\n")
 
 # 4. Vicinae
 os.makedirs(PATHS["vicinae_dir"], exist_ok=True)
