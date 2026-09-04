@@ -39,6 +39,9 @@ with open(PATHS["quickshell"], "w") as f:
 with open(PATHS["hypr_colors"], "w") as f:
     f.write(f"$fundo = rgb({fundo})\n$superficie = rgb({superficie})\n$base = rgb({base})\n$destaque1 = rgb({destaque1})\n$destaque2 = rgb({destaque2})\n$texto = rgb({texto})\n")
 
+with open(PATHS["hypr_colors"].replace(".conf", ".lua"), "w") as f:
+    f.write(f'return {{\n    fundo = "0xff{fundo}",\n    superficie = "0xff{superficie}",\n    base = "0xff{base}",\n    destaque1 = "0xff{destaque1}",\n    destaque2 = "0xff{destaque2}",\n    texto = "0xff{texto}"\n}}\n')
+
 # 3. Hyprpaper
 with open(PATHS["hyprpaper"], "w") as f:
     f.write(f"splash = false\nwallpaper {{\n    monitor =\n    path = {wall}\n    fit_mode = cover\n}}\n")
@@ -101,7 +104,8 @@ with open(PATHS["gtk3"], "w") as f:
     f.write(f"@define-color theme_bg_color #{fundo};\n@define-color theme_fg_color #{texto};\n@define-color theme_base_color #{superficie};\n@define-color theme_text_color #{texto};\n@define-color theme_selected_bg_color #{destaque1};\nwindow, dialog, notebook {{ background-color: @theme_bg_color; color: @theme_fg_color; }}\n")
 
 # Reloads
-subprocess.run(["hyprctl", "hyprpaper", "wallpaper", f",{wall}"], capture_output=True, check=False)
+subprocess.run(["killall", "hyprpaper"], capture_output=True, check=False)
+subprocess.Popen(["hyprpaper"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
 subprocess.run(["killall", "-USR1", "kitty"], capture_output=True, check=False)
 subprocess.run(["hyprctl", "dispatch", "sendshortcut", "CTRL SHIFT,comma,class:com.mitchellh.ghostty"], capture_output=True, check=False)
 subprocess.run(["killall", "thunar"], capture_output=True, check=False)
