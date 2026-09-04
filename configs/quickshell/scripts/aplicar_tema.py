@@ -41,7 +41,7 @@ with open(PATHS["hypr_colors"], "w") as f:
 
 # 3. Hyprpaper
 with open(PATHS["hyprpaper"], "w") as f:
-    f.write(f"preload = {wall}\nwallpaper = ,{wall}\nsplash = false\n")
+    f.write(f"splash = false\nwallpaper {{\n    monitor =\n    path = {wall}\n    fit_mode = cover\n}}\n")
 
 # 4. Vicinae
 os.makedirs(PATHS["vicinae_dir"], exist_ok=True)
@@ -101,9 +101,7 @@ with open(PATHS["gtk3"], "w") as f:
     f.write(f"@define-color theme_bg_color #{fundo};\n@define-color theme_fg_color #{texto};\n@define-color theme_base_color #{superficie};\n@define-color theme_text_color #{texto};\n@define-color theme_selected_bg_color #{destaque1};\nwindow, dialog, notebook {{ background-color: @theme_bg_color; color: @theme_fg_color; }}\n")
 
 # Reloads
-subprocess.run(["hyprctl", "hyprpaper", "preload", wall], capture_output=True, check=False)
-subprocess.run(["hyprctl", "hyprpaper", "wallpaper", f"HDMI-A-1,{wall}"], capture_output=True, check=False)
-subprocess.run(["hyprctl", "hyprpaper", "wallpaper", f"DP-1,{wall}"], capture_output=True, check=False)
+subprocess.run(["hyprctl", "hyprpaper", "wallpaper", f",{wall}"], capture_output=True, check=False)
 subprocess.run(["killall", "-USR1", "kitty"], capture_output=True, check=False)
 subprocess.run(["hyprctl", "dispatch", "sendshortcut", "CTRL SHIFT,comma,class:com.mitchellh.ghostty"], capture_output=True, check=False)
 subprocess.run(["killall", "thunar"], capture_output=True, check=False)
