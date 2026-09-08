@@ -1,0 +1,39 @@
+{
+  "barHeight": 34,
+  "barRadius": 8,
+  "barMargin": 8,
+  "itemSpacing": 14,
+  "contentPadding": 10,
+  "showBorder": true,
+  "borderWidth": 1,
+  "topOpacity": null,
+  "bottomOpacity": null,
+  "topItems": [
+    {
+      "id": "resource",
+      "enabled": true
+    },
+    {
+      "id": "clock",
+      "enabled": true
+    },
+    {
+      "id": "media",
+      "enabled": true
+    }
+  ],
+  "bottomItems": [
+    {
+      "id": "workspaces",
+      "enabled": true
+    },
+    {
+      "id": "sysmenu",
+      "enabled": true
+    },
+    {
+      "id": "tray",
+      "enabled": true
+    }
+  ]
+}

@@ -41,6 +41,7 @@ Window {
     onShownChanged: {
         if (shown) {
             appearanceTab.reload()
+            barsTab.reload()
             defaultAppsTab.reload()
             packagesTab.reloadStats()
             hyprlandConfigTab.reload()
@@ -100,11 +101,12 @@ Window {
                     themeCreator.searchFilter = ""
                 } }
                 SettingsNavButton { label: "✨  Aparência"; active: stack.currentIndex === 2; onClicked: stack.currentIndex = 2 }
-                
+                SettingsNavButton { label: "📐  Barras"; active: stack.currentIndex === 3; onClicked: stack.currentIndex = 3 }
+
                 Text { text: "SISTEMA"; font.pixelSize: 10; color: Cfg.Colors.dim; font.bold: true; Layout.leftMargin: 20; Layout.topMargin: 16; Layout.bottomMargin: 4 }
-                SettingsNavButton { label: "⭐  Apps Padrão"; active: stack.currentIndex === 3; onClicked: stack.currentIndex = 3 }
-                SettingsNavButton { label: "📦  Pacotes"; active: stack.currentIndex === 4; onClicked: stack.currentIndex = 4 }
-                SettingsNavButton { label: "⚙️  Gestor de Janelas (Hyprland)"; active: stack.currentIndex === 5; onClicked: stack.currentIndex = 5 }
+                SettingsNavButton { label: "⭐  Apps Padrão"; active: stack.currentIndex === 4; onClicked: stack.currentIndex = 4 }
+                SettingsNavButton { label: "📦  Pacotes"; active: stack.currentIndex === 5; onClicked: stack.currentIndex = 5 }
+                SettingsNavButton { label: "⚙️  Gestor de Janelas (Hyprland)"; active: stack.currentIndex === 6; onClicked: stack.currentIndex = 6 }
 
                 Item { Layout.fillHeight: true } // Espaçador
 
@@ -367,14 +369,24 @@ Window {
                         anchors.fill: parent
                     }
                 }
-                
-                // 3: Apps Padrão
+
+                // 3: Barras
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    BarsTab {
+                        id: barsTab
+                        anchors.fill: parent
+                    }
+                }
+
+                // 4: Apps Padrão
                 DefaultAppsTab { id: defaultAppsTab; Layout.fillWidth: true; Layout.fillHeight: true }
-                
-                // 4: Pacotes
+
+                // 5: Pacotes
                 PackagesTab { id: packagesTab; Layout.fillWidth: true; Layout.fillHeight: true }
-                
-                // 5: Hyprland
+
+                // 6: Hyprland
                 Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true

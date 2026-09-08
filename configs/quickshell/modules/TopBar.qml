@@ -18,35 +18,68 @@ import "../config" as Cfg
 // pra "sobrar espaço" e empurrar algo pra ponta), um RowLayout comum com
 // espaçamento fixo entre os grupos resolve isso de forma muito mais
 // simples e sem contas manuais.
+//
+// PERSONALIZÁVEL (aba "Barras" da Central): geometria, borda e opacidade
+// vêm de Cfg.BarConfig; os itens visíveis — e a ordem deles — são
+// `Cfg.BarConfig.topEnabledIds`. Cada id vira um widget real via
+// Repeater + Loader + seleção por componente em root.itemById().
 PanelWindow {
     id: root
     required property var modelData
     screen: modelData
 
     anchors.top: true
-    implicitHeight: Cfg.Config.barHeight
-    implicitWidth: content.implicitWidth + Cfg.Config.contentPadding * 2
-    margins.top: Cfg.Config.barMargin
+    implicitHeight: Cfg.BarConfig.barHeight
+    implicitWidth: content.implicitWidth + Cfg.BarConfig.contentPadding * 2
+    margins.top: Cfg.BarConfig.barMargin
     color: "transparent"
 
     WlrLayershell.namespace: "quickshell:topbar"
     WlrLayershell.layer: WlrLayer.Top
 
+    // Alfa do fundo: null = segue a transparência que o tema define;
+    // caso contrário força o valor escolhido na aba Barras.
+    readonly property real barAlpha: {
+        const o = Cfg.BarConfig.topOpacity
+        if (o === null || o === undefined || o < 0) return Cfg.Colors.baseOpacity
+        return o
+    }
+
+    // Cada tipo de item, empacotado em Component pra poder ser selecionado
+    // por id no itemById(). Components declarados aqui não são criados até
+    // que um Loader os carregue.
+    Component { id: compResource; ResourceIndicator {} }
+    Component { id: compClock; ClockWeather {} }
+    Component { id: compMedia; MediaIndicator {} }
+
+    function itemById(id) {
+        switch (id) {
+            case "resource": return compResource
+            case "clock": return compClock
+            case "media": return compMedia
+            default: return null
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
-        radius: Cfg.Config.barRadius
-        color: Cfg.Colors.bg
+        radius: Cfg.BarConfig.barRadius
+        color: Qt.rgba(Cfg.Colors.bgSolid.r, Cfg.Colors.bgSolid.g, Cfg.Colors.bgSolid.b, root.barAlpha)
         border.color: Cfg.Colors.border
-        border.width: 1
+        border.width: Cfg.BarConfig.showBorder ? Cfg.BarConfig.borderWidth : 0
 
         RowLayout {
             id: content
             anchors.centerIn: parent
-            spacing: 14
+            spacing: Cfg.BarConfig.itemSpacing
 
-            ResourceIndicator { Layout.alignment: Qt.AlignVCenter }
-            ClockWeather { Layout.alignment: Qt.AlignVCenter }
-            MediaIndicator { Layout.alignment: Qt.AlignVCenter }
+            Repeater {
+                model: Cfg.BarConfig.topEnabledIds
+                delegate: Loader {
+                    Layout.alignment: Qt.AlignVCenter
+                    sourceComponent: root.itemById(modelData)
+                }
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
 singleton Colors 1.0 Colors.qml
 singleton Config 1.0 Config.qml
 singleton Icons 1.0 Icons.qml
+singleton BarConfig 1.0 BarConfig.qml
