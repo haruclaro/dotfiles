@@ -17,23 +17,24 @@ QtObject {
     property int ram: 0
     property string ramText: ""
     property int disk: 0
+    property string diskText: ""
 
     property color accentColor: {
-        const usageMax = Math.max(cpu, ram, gpu, disk)
+        const usageMax = Math.max(cpu, ram, gpu)
         if (usageMax > 90) return Cfg.Colors.critical
         if (usageMax > 70) return Cfg.Colors.warning
         return Cfg.Colors.accent
     }
 
     readonly property string severity: {
-        const usageMax = Math.max(cpu, ram, gpu, disk)
+        const usageMax = Math.max(cpu, ram, gpu)
         const tempMax = Math.max(cpuTemp, gpuTemp)
         if (usageMax >= 85 || tempMax >= 80) return "critical"
         if (usageMax >= 60 || tempMax >= 65) return "warning"
         return "normal"
     }
 
-    readonly property real overallUsage: Math.max(cpu, ram, gpu, disk) / 100
+    readonly property real overallUsage: Math.max(cpu, ram, gpu) / 100
 
     property Process cpuProc: Process {
         command: ["bash", "-c", "LC_ALL=C vmstat 1 2 | tail -1 | awk '{print 100 - $15}'"]
@@ -87,11 +88,17 @@ QtObject {
         }
     }
     property Process diskProc: Process {
-        command: ["bash", "-c", "df -h / | awk 'NR==2 {print $5}' | tr -d '%'"]
+        command: ["bash", "-c", "LC_ALL=C df -B1 / | awk 'NR==2 { printf \"{\\\"text\\\":\\\"%.1fG/%.1fG\\\",\\\"pct\\\":%.0f}\", $3/1024/1024/1024, $2/1024/1024/1024, $3/$2*100 }'"]
         stdout: StdioCollector {
             onStreamFinished: {
-                const n = parseFloat(this.text)
-                root.disk = isFinite(n) ? Math.round(n) : 0
+                try {
+                    const data = JSON.parse(this.text)
+                    root.disk = data.pct
+                    root.diskText = data.text
+                } catch (e) {
+                    root.disk = 0
+                    root.diskText = "Erro"
+                }
             }
         }
     }

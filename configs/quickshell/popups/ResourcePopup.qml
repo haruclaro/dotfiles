@@ -66,7 +66,7 @@ Item {
             spacing: 6
             Text { text: "Memória e Disco"; color: Cfg.Colors.subtext; font.bold: true; font.pixelSize: 12 }
             Meter { label: "RAM"; value: Services.Resources.ram; extraText: Services.Resources.ramText }
-            Meter { label: "Disco (/)"; value: Services.Resources.disk }
+            Meter { label: "Disco (/)"; value: Services.Resources.disk; extraText: Services.Resources.diskText }
         }
     }
 }
