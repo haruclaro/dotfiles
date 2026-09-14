@@ -112,7 +112,7 @@ if not hyprpaper_running:
     time.sleep(1)
 subprocess.run(["hyprctl", "hyprpaper", "wallpaper", f",{wall}"], capture_output=True, check=False)
 subprocess.run(["killall", "-USR1", "kitty"], capture_output=True, check=False)
-subprocess.run(["hyprctl", "dispatch", "sendshortcut", "CTRL SHIFT,comma,class:com.mitchellh.ghostty"], capture_output=True, check=False)
+subprocess.run(["killall", "-USR2", "ghostty"], capture_output=True, check=False)
 subprocess.run(["killall", "thunar"], capture_output=True, check=False)
 
 subprocess.run(["killall", "vicinae"], capture_output=True, check=False)
