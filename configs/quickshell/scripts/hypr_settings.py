@@ -5,7 +5,7 @@ import re
 import os
 import subprocess
 
-CONFIG_PATH = os.path.expanduser("~/.config/hypr/hyprland.conf")
+CONFIG_PATH = os.path.expanduser("~/.config/hypr/hyprland.lua")
 
 def read_config():
     with open(CONFIG_PATH, "r") as f:
@@ -19,52 +19,35 @@ def read_config():
         "animations_enabled": True
     }
 
-    # Simple regex matches
-    m = re.search(r"^\s*gaps_in\s*=\s*(\d+)", content, re.M)
+    m = re.search(r"\bgaps_in\s*=\s*(\d+)", content)
     if m: settings["gaps_in"] = int(m.group(1))
 
-    m = re.search(r"^\s*gaps_out\s*=\s*(\d+)", content, re.M)
+    m = re.search(r"\bgaps_out\s*=\s*(\d+)", content)
     if m: settings["gaps_out"] = int(m.group(1))
 
-    m = re.search(r"^\s*border_size\s*=\s*(\d+)", content, re.M)
+    m = re.search(r"\bborder_size\s*=\s*(\d+)", content)
     if m: settings["border_size"] = int(m.group(1))
 
-    m = re.search(r"^\s*rounding\s*=\s*(\d+)", content, re.M)
+    m = re.search(r"\brounding\s*=\s*(\d+)", content)
     if m: settings["rounding"] = int(m.group(1))
 
-    m = re.search(r"^\s*layout\s*=\s*(\w+)", content, re.M)
+    m = re.search(r'\blayout\s*=\s*"([^"]+)"', content)
     if m: settings["layout"] = m.group(1)
 
-    m = re.search(r"^\s*active_opacity\s*=\s*([\d\.]+)", content, re.M)
+    m = re.search(r"\bactive_opacity\s*=\s*([\d\.]+)", content)
     if m: settings["active_opacity"] = float(m.group(1))
 
-    m = re.search(r"^\s*inactive_opacity\s*=\s*([\d\.]+)", content, re.M)
+    m = re.search(r"\binactive_opacity\s*=\s*([\d\.]+)", content)
     if m: settings["inactive_opacity"] = float(m.group(1))
 
-    # For block scoped settings like blur { enabled = true } we use simpler global matches assuming standard format
-    m = re.search(r"blur\s*\{[^}]*enabled\s*=\s*(true|false|1|0)[^}]*\}", content, re.S)
-    if m: settings["blur_enabled"] = m.group(1).lower() in ["true", "1"]
+    m = re.search(r"blur\s*=\s*\{[^}]*enabled\s*=\s*(true|false)[^}]*\}", content)
+    if m: settings["blur_enabled"] = m.group(1) == "true"
 
-    m = re.search(r"shadow\s*\{[^}]*enabled\s*=\s*(true|false|1|0)[^}]*\}", content, re.S)
-    if m: settings["shadow_enabled"] = m.group(1).lower() in ["true", "1"]
+    m = re.search(r"shadow\s*=\s*\{[^}]*enabled\s*=\s*(true|false)[^}]*\}", content)
+    if m: settings["shadow_enabled"] = m.group(1) == "true"
 
-    m = re.search(r"animations\s*\{[^}]*enabled\s*=\s*(yes|no|true|false|1|0)[^}]*\}", content, re.S)
-    if m: settings["animations_enabled"] = m.group(1).lower() in ["yes", "true", "1"]
-
-    # Read exec-once
-    settings["execs"] = re.findall(r"^\s*exec-once\s*=\s*(.+)$", content, re.M)
-    
-    # Read binds
-    settings["binds"] = []
-    binds_matches = re.finditer(r"^\s*bind\w*\s*=\s*([^,]+),\s*([^,]+),\s*([^,]+),\s*(.+)$", content, re.M)
-    for match in binds_matches:
-        settings["binds"].append({
-            "mods": match.group(1).strip(),
-            "key": match.group(2).strip(),
-            "action": match.group(3).strip(),
-            "command": match.group(4).strip(),
-            "raw": match.group(0).strip()
-        })
+    m = re.search(r"animations\s*=\s*\{[^}]*enabled\s*=\s*(true|false)[^}]*\}", content)
+    if m: settings["animations_enabled"] = m.group(1) == "true"
 
     return settings
 
@@ -73,21 +56,26 @@ def write_setting(key, value):
         content = f.read()
 
     # Apply replacement
-    if key in ["gaps_in", "gaps_out", "border_size", "rounding", "layout", "active_opacity", "inactive_opacity"]:
-        pattern = rf"^( *{key} *= *).*$"
+    if key in ["gaps_in", "gaps_out", "border_size", "rounding", "active_opacity", "inactive_opacity"]:
+        pattern = rf"(\b{key}\s*=\s*)[\d\.]+"
         replacement = rf"\g<1>{value}"
-        if re.search(pattern, content, re.M):
-            content = re.sub(pattern, replacement, content, flags=re.M)
+        if re.search(pattern, content):
+            content = re.sub(pattern, replacement, content)
+            
+    elif key == "layout":
+        pattern = rf'(\blayout\s*=\s*)"[^"]+"'
+        replacement = rf'\g<1>"{value}"'
+        if re.search(pattern, content):
+            content = re.sub(pattern, replacement, content)
             
     elif key in ["blur_enabled", "shadow_enabled", "animations_enabled"]:
         block = key.split('_')[0]
         v_str = "true" if str(value).lower() in ["true", "1"] else "false"
-        if block == "animations": v_str = "yes" if v_str == "true" else "no"
         
-        pattern = rf"({block}\s*{{[^}}]*?)^\s*enabled\s*=.*$"
-        replacement = rf"\1    enabled = {v_str}"
-        if re.search(pattern, content, re.M):
-            content = re.sub(pattern, replacement, content, flags=re.M)
+        pattern = rf"(\b{block}\s*=\s*\{{[^}}]*?\benabled\s*=\s*)(true|false)"
+        replacement = rf"\g<1>{v_str}"
+        if re.search(pattern, content):
+            content = re.sub(pattern, replacement, content)
         
     import tempfile
     fd, temp_path = tempfile.mkstemp(dir=os.path.dirname(CONFIG_PATH))
