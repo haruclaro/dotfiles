@@ -18,6 +18,6 @@ case "$1" in
         systemctl reboot
         ;;
     "logout")
-        loginctl terminate-user $USER
+        hyprctl dispatch exit
         ;;
 esac
