@@ -26,6 +26,10 @@ QtObject {
     readonly property string systemMenu: "open-menu-symbolic"
     readonly property string styleAll: "emblem-system-symbolic"        // engrenagem — lança o StyleAll
     readonly property string wifi: "network-wireless-symbolic"
+    readonly property string wifiHigh: "network-wireless-signal-excellent-symbolic"
+    readonly property string wifiMedium: "network-wireless-signal-good-symbolic"
+    readonly property string wifiLow: "network-wireless-signal-weak-symbolic"
+    readonly property string lock: "network-wireless-encrypted-symbolic"
     readonly property string bluetoothActive: "bluetooth-active-symbolic"
     readonly property string bluetoothDisabled: "bluetooth-disabled-symbolic"
     readonly property string battery: "battery-good-symbolic"

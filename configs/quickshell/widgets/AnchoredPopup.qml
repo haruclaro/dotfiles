@@ -11,8 +11,8 @@ PopupWindow {
     property int edges: Edges.Bottom
     property int popupMargin: 16
 
-    implicitWidth: loader.item ? loader.item.implicitWidth + Cfg.Config.contentPadding * 2 : 1
-    implicitHeight: loader.item ? loader.item.implicitHeight + Cfg.Config.contentPadding * 2 + popupMargin : 1
+    implicitWidth: loader.item ? loader.item.implicitWidth + Cfg.BarConfig.contentPadding * 2 : 1
+    implicitHeight: loader.item ? loader.item.implicitHeight + Cfg.BarConfig.contentPadding * 2 + popupMargin : 1
     visible: false
     color: "transparent"
 
@@ -47,7 +47,7 @@ PopupWindow {
         Rectangle {
             id: frame
             anchors.fill: parent
-            radius: Cfg.Config.barRadius
+            radius: Cfg.BarConfig.barRadius
             color: Cfg.Colors.bgElevated
             border.color: Cfg.Colors.border
             border.width: 1
@@ -79,7 +79,7 @@ PopupWindow {
             Loader {
                 id: loader
                 anchors.fill: parent
-                anchors.margins: Cfg.Config.contentPadding
+                anchors.margins: Cfg.BarConfig.contentPadding
                 sourceComponent: root.contentComponent
                 active: root.visible
             }

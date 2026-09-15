@@ -18,7 +18,7 @@ Item {
     implicitHeight: Cfg.Config.dockCollapsedSize
     implicitWidth: expanded ? expandedWidth : collapsedWidth
 
-    property int expandedWidth: contentLoader.item ? contentLoader.item.implicitWidth + Cfg.Config.contentPadding * 2 : collapsedWidth
+    property int expandedWidth: contentLoader.item ? contentLoader.item.implicitWidth + Cfg.BarConfig.contentPadding * 2 : collapsedWidth
 
     Behavior on implicitWidth {
         NumberAnimation {
@@ -54,7 +54,7 @@ Item {
             id: contentLoader
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.leftMargin: Cfg.Config.contentPadding
+            anchors.leftMargin: Cfg.BarConfig.contentPadding
             active: true
             opacity: root.expanded ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: Cfg.Config.animFast; easing.type: Cfg.Config.easingFade } }

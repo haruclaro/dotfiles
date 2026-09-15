@@ -28,7 +28,7 @@ Item {
     }
     readonly property bool hasMedia: activePlayer !== null
 
-    implicitHeight: Cfg.Config.barHeight - 8
+    implicitHeight: Cfg.BarConfig.barHeight - 8
     implicitWidth: hasMedia ? 190 : 30
 
     Behavior on implicitWidth {

@@ -61,11 +61,11 @@ def load():
 def save(data):
     """Grava atomicamente (temp + rename) para não deixar JSON meio-escrito."""
     os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
-    tmp = CONFIG_PATH + ".tmp"
-    with open(tmp, "w") as f:
+    #tmp
+    with open(CONFIG_PATH, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
         f.write("\n")
-    os.replace(tmp, CONFIG_PATH)
+    #os.replace
 
 
 def parse_items(value, known):

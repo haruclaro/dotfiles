@@ -8,7 +8,7 @@ import "../popups" as Popups
 Item {
     id: root
     implicitWidth: 62
-    implicitHeight: Cfg.Config.barHeight - 8
+    implicitHeight: Cfg.BarConfig.barHeight - 8
 
     readonly property color severityColor: {
         if (Services.Resources.severity === "critical") return Cfg.Colors.critical

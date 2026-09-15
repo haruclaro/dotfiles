@@ -12,7 +12,7 @@ def get_hyprland_info():
         m = re.search(r"Tag:\s*v(\d+)\.(\d+)", output)
         if m:
             major, minor = int(m.group(1)), int(m.group(2))
-            if major > 0 or minor >= 57:
+            if major > 0 or minor >= 56:
                 is_lua = True
     except Exception:
         pass
@@ -151,7 +151,24 @@ def write_setting(key, value):
         f.write(content)
     os.rename(temp_path, CONFIG_PATH)
 
-    subprocess.run(["hyprctl", "reload"])
+    
+    if key == "gaps_in": subprocess.run(["hyprctl", "eval", f"hl.config({{general = {{gaps_in = {value}}}}})"])
+    elif key == "gaps_out": subprocess.run(["hyprctl", "eval", f"hl.config({{general = {{gaps_out = {value}}}}})"])
+    elif key == "border_size": subprocess.run(["hyprctl", "eval", f"hl.config({{general = {{border_size = {value}}}}})"])
+    elif key == "rounding": subprocess.run(["hyprctl", "eval", f"hl.config({{decoration = {{rounding = {value}}}}})"])
+    elif key == "active_opacity": subprocess.run(["hyprctl", "eval", f"hl.config({{decoration = {{active_opacity = {value}}}}})"])
+    elif key == "inactive_opacity": subprocess.run(["hyprctl", "eval", f"hl.config({{decoration = {{inactive_opacity = {value}}}}})"])
+    elif key == "layout": subprocess.run(["hyprctl", "eval", f'hl.config({{general = {{layout = "{value}"}}}})' ])
+    elif key == "blur_enabled":
+        v_str = "true" if str(value).lower() in ["true", "1"] else "false"
+        subprocess.run(["hyprctl", "eval", f"hl.config({{decoration = {{blur = {{enabled = {v_str}}}}}}})"])
+    elif key == "shadow_enabled":
+        v_str = "true" if str(value).lower() in ["true", "1"] else "false"
+        subprocess.run(["hyprctl", "eval", f"hl.config({{decoration = {{shadow = {{enabled = {v_str}}}}}}})"])
+    elif key == "animations_enabled":
+        v_str = "true" if str(value).lower() in ["true", "1", "yes"] else "false"
+        subprocess.run(["hyprctl", "eval", f"hl.config({{animations = {{enabled = {v_str}}}}})"])
+
 
 if __name__ == "__main__":
     action = sys.argv[1] if len(sys.argv) > 1 else "get"

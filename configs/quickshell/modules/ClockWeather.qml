@@ -37,7 +37,7 @@ RowLayout {
     Item {
         id: clockGroup
         implicitWidth: dateReveal.width + clockText.implicitWidth + 6
-        implicitHeight: Cfg.Config.barHeight - 8
+        implicitHeight: Cfg.BarConfig.barHeight - 8
 
         readonly property bool hovered: clockHover.containsMouse || dateHover.containsMouse
 
@@ -135,7 +135,7 @@ RowLayout {
     Rectangle {
         id: weatherBtn
         implicitWidth: weatherRow.implicitWidth + 16
-        implicitHeight: Cfg.Config.barHeight - 8
+        implicitHeight: Cfg.BarConfig.barHeight - 8
         radius: Cfg.Config.chipRadius
         color: weatherHover.containsMouse ? Cfg.Colors.hoverOverlay : "transparent"
 

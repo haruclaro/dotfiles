@@ -2,7 +2,7 @@
 
 # 1. Pede ao Hyprland para fechar todas as janelas ativas graciosamente
 for window in $(hyprctl clients -j | jq -r '.[].address'); do
-    hyprctl dispatch closewindow address:$window
+    hyprctl dispatch "hl.dsp.window.close({ window = \"address:$window\" })"
 done
 
 # 2. Aguarda 2 segundos para dar tempo das animações terminarem 
@@ -18,6 +18,6 @@ case "$1" in
         systemctl reboot
         ;;
     "logout")
-        hyprctl dispatch exit
+        hyprctl dispatch 'hl.dsp.exit()'
         ;;
 esac

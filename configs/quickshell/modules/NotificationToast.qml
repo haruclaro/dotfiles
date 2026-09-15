@@ -18,8 +18,8 @@ PanelWindow {
     // Posição: topo-direita, flutuando sobre tudo
     anchors.top: true
     anchors.right: true
-    margins.top: Cfg.Config.barMargin + Cfg.Config.barHeight + 8
-    margins.right: Cfg.Config.barMargin
+    margins.top: Cfg.BarConfig.barMargin + Cfg.BarConfig.barHeight + 8
+    margins.right: Cfg.BarConfig.barMargin
 
     // Tamanho dinâmico baseado no conteúdo
     implicitWidth: 380

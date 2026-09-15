@@ -121,6 +121,7 @@ Item {
             Layout.fillWidth: true
             spacing: 10
             Rectangle {
+                id: wifiChip
                 Layout.fillWidth: true; height: 34; radius: Cfg.Config.chipRadius
                 color: root.wifiConnected ? Cfg.Colors.accentDim : Cfg.Colors.bgAlt
                 RowLayout {
@@ -128,7 +129,15 @@ Item {
                     Widgets.SymbolicIcon { name: root.wifiIconName; width: 14; height: 14; color: root.wifiConnected ? Cfg.Colors.text : Cfg.Colors.dim }
                     Text { text: root.wifiStatus; color: Cfg.Colors.text; font.pixelSize: 11; elide: Text.ElideRight }
                 }
-                MouseArea { anchors.fill: parent; onClicked: Quickshell.execDetached(["nm-connection-editor"]) }
+                MouseArea { anchors.fill: parent; onClicked: networkPopup.toggle() }
+                
+                Widgets.AnchoredPopup {
+                    id: networkPopup
+                    anchorItem: wifiChip
+                    edges: Edges.Top | Edges.Right
+                    popupMargin: 10
+                    contentComponent: NetworkPopup {}
+                }
             }
             Rectangle {
                 Layout.fillWidth: true; height: 34; radius: Cfg.Config.chipRadius

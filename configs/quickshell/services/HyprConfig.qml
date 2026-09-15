@@ -3,30 +3,20 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// PEDIDO: "módulo pra editar configurações do Hyprland... que pode ser
-// feito apenas via código". Baseado na filosofia do HyprMod
-// (github.com/BlueManCZ/hyprmod): NUNCA edita o hyprland.conf principal
-// direto — escreve só num arquivo próprio, incluído via "source =". Isso
-// significa que o usuário pode editar hyprland.conf à vontade sem medo
-// de conflito, e é super fácil de "desfazer tudo": só remove a linha de
-// source.
 QtObject {
     id: root
 
     readonly property string modConfPath: "/.config/hypr/quickshell-mod.conf"
     readonly property string mainConfPath: "/.config/hypr/hyprland.conf"
 
-    // Valores atuais (lidos do arquivo próprio na abertura do módulo)
     property int gapsIn: 5
     property int gapsOut: 10
     property int borderSize: 2
     property int rounding: 8
-    property string activeBorderColor: "rgba(8aadf4ff)"
-    property string inactiveBorderColor: "rgba(2c2f42aa)"
-    property var autostart: []   // lista de strings, uma por linha "exec-once"
+    property var autostart: []
 
     property bool loaded: false
-    property bool dirty: false    // true quando há mudanças não salvas
+    property bool dirty: false
 
     signal saved()
     signal saveFailed(string reason)
@@ -38,7 +28,7 @@ QtObject {
     property FileView modFile: FileView {
         path: root._fullPath(root.modConfPath)
         printErrors: false
-        watchChanges: false   // evita reler enquanto o próprio módulo está escrevendo
+        watchChanges: false
     }
 
     function load() {
@@ -46,7 +36,6 @@ QtObject {
             const text = modFile.text()
             _parse(text)
         } catch (e) {
-            // Arquivo ainda não existe — fica nos valores padrão.
         }
         root.loaded = true
         root.dirty = false
@@ -57,14 +46,10 @@ QtObject {
         const go = text.match(/gaps_out\s*=\s*(\d+)/)
         const bs = text.match(/border_size\s*=\s*(\d+)/)
         const ro = text.match(/rounding\s*=\s*(\d+)/)
-        const ab = text.match(/col\.active_border\s*=\s*(\S+)/)
-        const ib = text.match(/col\.inactive_border\s*=\s*(\S+)/)
         if (gi) root.gapsIn = parseInt(gi[1])
         if (go) root.gapsOut = parseInt(go[1])
         if (bs) root.borderSize = parseInt(bs[1])
         if (ro) root.rounding = parseInt(ro[1])
-        if (ab) root.activeBorderColor = ab[1]
-        if (ib) root.inactiveBorderColor = ib[1]
 
         const execLines = []
         const re = /^exec-once\s*=\s*(.+)$/gm
@@ -90,21 +75,34 @@ QtObject {
 
     function _buildConfText() {
         let out = "# Gerado pelo módulo de configurações do Quickshell.\n"
-        out += "# NÃO edite manualmente — suas mudanças serão sobrescritas na\n"
-        out += "# próxima vez que salvar pelo shell. Edite hyprland.conf à\n"
-        out += "# vontade; este arquivo só existe pra não mexer nele direto.\n\n"
         out += "general {\n"
         out += "    gaps_in = " + root.gapsIn + "\n"
         out += "    gaps_out = " + root.gapsOut + "\n"
         out += "    border_size = " + root.borderSize + "\n"
-        out += "    col.active_border = " + root.activeBorderColor + "\n"
-        out += "    col.inactive_border = " + root.inactiveBorderColor + "\n"
         out += "}\n\n"
         out += "decoration {\n"
         out += "    rounding = " + root.rounding + "\n"
         out += "}\n\n"
         for (const cmd of root.autostart) {
             out += "exec-once = " + cmd + "\n"
+        }
+        return out
+    }
+
+    function _buildLuaText() {
+        let out = "-- Gerado pelo módulo de configurações do Quickshell.\n"
+        out += "hl.config({\n"
+        out += "    general = {\n"
+        out += "        gaps_in = " + root.gapsIn + ",\n"
+        out += "        gaps_out = " + root.gapsOut + ",\n"
+        out += "        border_size = " + root.borderSize + "\n"
+        out += "    },\n"
+        out += "    decoration = {\n"
+        out += "        rounding = " + root.rounding + "\n"
+        out += "    }\n"
+        out += "})\n\n"
+        for (const cmd of root.autostart) {
+            out += "hl.on('hyprland.start', function() hl.exec_cmd('" + cmd.replace(/'/g, "\\'") + "') end)\n"
         }
         return out
     }
@@ -124,15 +122,15 @@ QtObject {
 
     function save() {
         const text = _buildConfText()
-        // Escreve via bash (heredoc) em vez de FileView.setText, pra
-        // garantir permissões corretas e também rodar a checagem/inclusão
-        // da linha "source" no hyprland.conf principal na mesma tacada.
+        const luaText = _buildLuaText()
+        const escapedLua = luaText.replace(/'/g, "'\\''")
         const escaped = text.replace(/'/g, "'\\''")
+        
         const cmd = "set -e; " +
             "mkdir -p \"$HOME/.config/hypr\"; " +
             "printf '%s' '" + escaped + "' > \"$HOME" + root.modConfPath + "\"; " +
-            "grep -qF 'source = ~/.config/hypr/quickshell-mod.conf' \"$HOME" + root.mainConfPath + "\" 2>/dev/null || " +
-            "echo 'source = ~/.config/hypr/quickshell-mod.conf' >> \"$HOME" + root.mainConfPath + "\""
+            "printf '%s' '" + escapedLua + "' > \"$HOME/.config/hypr/quickshell-mod.lua\"; "
+
         saveProc.command = ["bash", "-c", cmd]
         saveProc.running = true
     }

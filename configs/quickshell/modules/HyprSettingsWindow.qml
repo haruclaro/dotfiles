@@ -36,7 +36,7 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        radius: Cfg.Config.barRadius
+        radius: Cfg.BarConfig.barRadius
         color: Cfg.Colors.bg
         border.color: Cfg.Colors.border
         border.width: 1

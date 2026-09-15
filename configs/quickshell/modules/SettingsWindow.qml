@@ -164,7 +164,7 @@ Window {
                             delegate: Rectangle {
                                 width: 240
                                 height: 160
-                                radius: Cfg.Config.barRadius
+                                radius: Cfg.BarConfig.barRadius
                                 color: Cfg.Colors.bgElevated
                                 border.color: cardHover.containsMouse ? Cfg.Colors.accent : Cfg.Colors.border
                                 border.width: 1

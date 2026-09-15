@@ -20,6 +20,7 @@ if [ "$1" == "retro" ]; then
     DESTAQUE1="9A7BB5"
     DESTAQUE2="7BB59A"
     TEXTO="E2DCE8"
+    GHOSTTY_THEME="retro-futurista"
 
     WALL_HDMI="/home/haru/Images/flower_knight.png"
     WALL_DP="/home/haru/Images/flower_knight.png"
@@ -32,6 +33,7 @@ elif [ "$1" == "doomer" ]; then
     DESTAQUE1="5E677A"
     DESTAQUE2="5C3F3F"
     TEXTO="A0A8B7"
+    GHOSTTY_THEME="doomer"
 
     WALL_HDMI="/home/haru/Images/doomer.jpeg"
     WALL_DP="/home/haru/Images/doomer.jpeg"
@@ -55,6 +57,14 @@ cat > "$QUICKSHELL_COLORS" <<EOF
 EOF
 
 # 2. Gerar o arquivo de cores do Hyprland
+# Update hyprland.lua directly
+sed -i "s/local fundo      = .*/local fundo      = \"rgb($FUNDO)\"/" $HOME/.config/hypr/hyprland.lua
+sed -i "s/local superficie = .*/local superficie = \"rgb($SUPERFICIE)\"/" $HOME/.config/hypr/hyprland.lua
+sed -i "s/local base       = .*/local base       = \"rgb($BASE)\"/" $HOME/.config/hypr/hyprland.lua
+sed -i "s/local destaque1  = .*/local destaque1  = \"rgb($DESTAQUE1)\"/" $HOME/.config/hypr/hyprland.lua
+sed -i "s/local destaque2  = .*/local destaque2  = \"rgb($DESTAQUE2)\"/" $HOME/.config/hypr/hyprland.lua
+sed -i "s/local texto      = .*/local texto      = \"rgb($TEXTO)\"/" $HOME/.config/hypr/hyprland.lua
+
 cat > "$HYPR_COLORS" <<EOF
 \$fundo = rgb($FUNDO)
 \$superficie = rgb($SUPERFICIE)
@@ -129,3 +139,13 @@ else
 fi
 
 echo "Feito! Sistema totalmente transformado."
+
+# Aplica cores de borda do hyprland em tempo real
+if command -v hyprctl &> /dev/null; then
+    hyprctl eval "hl.config({general = {col = {active_border = {colors = {'rgb($DESTAQUE1)', 'rgb($DESTAQUE2)'}, angle = 45}, inactive_border = 'rgb($BASE)'}}})"
+fi
+
+# 6. Atualizar Ghostty
+if [ -n "$GHOSTTY_THEME" ]; then
+    sed -i "s/^theme = .*/theme = $GHOSTTY_THEME/" $HOME/.config/ghostty/config
+fi

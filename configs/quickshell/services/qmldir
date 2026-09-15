@@ -3,3 +3,4 @@ singleton Resources 1.0 Resources.qml
 singleton Peripherals 1.0 Peripherals.qml
 singleton HyprConfig 1.0 HyprConfig.qml
 singleton Notifications 1.0 Notifications.qml
+singleton Network 1.0 Network.qml
