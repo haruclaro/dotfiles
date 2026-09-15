@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
+import Quickshell.Bluetooth
 import "../config" as Cfg
 import "../services" as Services
 import "../widgets" as Widgets
@@ -72,15 +73,7 @@ Item {
             }
         }
     }
-    Process {
-        id: btProc
-        command: ["bash", "-c", "bluetoothctl show | grep -q 'Powered: yes' && echo yes || echo no"]
-        running: true
-        stdout: StdioCollector {
-            onStreamFinished: root.btPowered = this.text.trim() === "yes"
-        }
-    }
-    Timer { interval: 5000; running: true; repeat: true; triggeredOnStart: true; onTriggered: { wifiProc.running = true; wifiSignalProc.running = true; btProc.running = true } }
+    Timer { interval: 5000; running: true; repeat: true; triggeredOnStart: true; onTriggered: { wifiProc.running = true; wifiSignalProc.running = true; } }
 
     function changeTheme(themeCmd) {
         Quickshell.execDetached(["bash", Cfg.Config.themeScript, themeCmd])
@@ -140,16 +133,23 @@ Item {
                 }
             }
             Rectangle {
+                id: btChip
                 Layout.fillWidth: true; height: 34; radius: Cfg.Config.chipRadius
-                color: root.btPowered ? Cfg.Colors.accentDim : Cfg.Colors.bgAlt
+                readonly property bool isOn: Bluetooth.defaultAdapter ? Bluetooth.defaultAdapter.enabled : false
+                color: isOn ? Cfg.Colors.accentDim : Cfg.Colors.bgAlt
                 RowLayout {
                     anchors.centerIn: parent; spacing: 6
-                    Widgets.SymbolicIcon { name: root.btPowered ? Cfg.Icons.bluetoothActive : Cfg.Icons.bluetoothDisabled; width: 14; height: 14; color: root.btPowered ? Cfg.Colors.text : Cfg.Colors.dim }
-                    Text { text: root.btPowered ? "Bluetooth ON" : "Bluetooth OFF"; color: Cfg.Colors.text; font.pixelSize: 11 }
+                    Widgets.SymbolicIcon { name: btChip.isOn ? Cfg.Icons.bluetoothActive : Cfg.Icons.bluetoothDisabled; width: 14; height: 14; color: btChip.isOn ? Cfg.Colors.text : Cfg.Colors.dim }
+                    Text { text: btChip.isOn ? "Bluetooth ON" : "Bluetooth OFF"; color: Cfg.Colors.text; font.pixelSize: 11 }
                 }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: Quickshell.execDetached(["bash", "-c", "blueman-manager || blueberry"])
+                MouseArea { anchors.fill: parent; onClicked: btPopup.toggle() }
+                
+                Widgets.AnchoredPopup {
+                    id: btPopup
+                    anchorItem: btChip
+                    edges: Edges.Top | Edges.Left
+                    popupMargin: 10
+                    contentComponent: BluetoothPopup {}
                 }
             }
         }
