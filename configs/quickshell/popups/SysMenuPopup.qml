@@ -21,6 +21,8 @@ Item {
     implicitWidth: 320
     implicitHeight: col.implicitHeight
 
+    signal requestClose()
+
     // PORTADO de SysMenu.tsx: lá o ícone vinha pronto de
     // createBinding(network.wifi, "iconName"), já dinâmico conforme a
     // força do sinal. Replicamos a mesma faixa de nomes padrão
@@ -103,7 +105,10 @@ Item {
                 id: styleAllHover
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: Quickshell.execDetached(["qs", "ipc", "call", "settings", "toggle"])
+                onClicked: {
+                    Quickshell.execDetached(["qs", "ipc", "call", "settings", "toggle"])
+                    root.requestClose()
+                }
             }
         }
 

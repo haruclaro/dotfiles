@@ -67,6 +67,8 @@ Item {
         anchorItem: sysBtn
         edges: Edges.Top
         popupMargin: 24
-        contentComponent: Popups.SysMenuPopup {}
+        contentComponent: Popups.SysMenuPopup {
+            onRequestClose: sysMenuPopup.close()
+        }
     }
 }

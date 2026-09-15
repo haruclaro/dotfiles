@@ -85,9 +85,9 @@ PopupWindow {
             }
 
             Rectangle {
-                anchors.top: parent.top
+                anchors.bottom: parent.bottom
                 anchors.right: parent.right
-                anchors.margins: 6
+                anchors.margins: 4
                 width: 24; height: 24
                 radius: Cfg.Config.chipRadius
                 color: root.isPinned ? Cfg.Colors.accent : (pinHover.containsMouse ? Cfg.Colors.hoverOverlay : "transparent")
