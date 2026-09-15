@@ -22,7 +22,7 @@ QtObject {
     readonly property int barRadius: 18
     readonly property int chipRadius: 999          // pill totalmente arredondado
     readonly property int barHeight: 34
-    readonly property int barMargin: 8              // distância da barra até a borda da tela
+    readonly property int barMargin: 4              // distância da barra até a borda da tela
     readonly property int dockCollapsedSize: 34      // diâmetro do dock recolhido (workspaces / sysmenu)
     readonly property int contentPadding: 10
 

@@ -41,7 +41,7 @@ QtObject {
     // --- Geometria ---
     readonly property int barHeight: cfg.barHeight !== undefined && cfg.barHeight !== null ? cfg.barHeight : 34
     readonly property int barRadius: cfg.barRadius !== undefined && cfg.barRadius !== null ? cfg.barRadius : 18
-    readonly property int barMargin: cfg.barMargin !== undefined && cfg.barMargin !== null ? cfg.barMargin : 8
+    readonly property int barMargin: cfg.barMargin !== undefined && cfg.barMargin !== null ? cfg.barMargin : 4
     readonly property int itemSpacing: cfg.itemSpacing !== undefined && cfg.itemSpacing !== null ? cfg.itemSpacing : 14
     readonly property int contentPadding: cfg.contentPadding !== undefined && cfg.contentPadding !== null ? cfg.contentPadding : 10
 
