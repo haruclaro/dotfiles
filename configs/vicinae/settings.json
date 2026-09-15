@@ -6,10 +6,11 @@
       }
    },
    "activate_on_single_click": true,
-   "close_on_focus_loss": true,
+   "close_on_focus_loss": false,
    "launcher_window": {
       "layer_shell": {
-         "keyboard_interactivity": "on_demand"
+         "keyboard_interactivity": "exclusive",
+         "enabled": true
       }
    }
 }
