@@ -1,11 +1,11 @@
 {
   "barHeight": 34,
   "barRadius": 5,
-  "barMargin": 4,
+  "barMargin": 0,
   "itemSpacing": 14,
   "contentPadding": 10,
-  "showBorder": true,
-  "borderWidth": 1,
+  "showBorder": false,
+  "borderWidth": 0,
   "topOpacity": null,
   "bottomOpacity": null,
   "topItems": [
