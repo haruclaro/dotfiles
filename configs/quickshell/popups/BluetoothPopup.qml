@@ -101,7 +101,7 @@ Item {
                             }
                             Text {
                                 visible: modelData.connected && modelData.batteryAvailable
-                                text: "Bateria: " + modelData.battery + "%"
+                                text: "Bateria: " + Math.round(modelData.battery * 100) + "%"
                                 color: Cfg.Colors.subtext
                                 font.pixelSize: 10
                             }
