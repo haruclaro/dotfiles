@@ -12,7 +12,7 @@ PopupWindow {
     property int popupMargin: 16
 
     implicitWidth: loader.item ? loader.item.implicitWidth + Cfg.BarConfig.contentPadding * 2 : 1
-    implicitHeight: loader.item ? loader.item.implicitHeight + Cfg.BarConfig.contentPadding * 2 + popupMargin : 1
+    implicitHeight: loader.item ? loader.item.implicitHeight + Cfg.BarConfig.contentPadding * 2 + popupMargin + 24 : 1
     visible: false
     color: "transparent"
 
@@ -78,8 +78,11 @@ PopupWindow {
 
             Loader {
                 id: loader
-                anchors.fill: parent
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
                 anchors.margins: Cfg.BarConfig.contentPadding
+                height: item ? item.implicitHeight : 0
                 sourceComponent: root.contentComponent
                 active: root.visible
             }
@@ -88,7 +91,7 @@ PopupWindow {
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 anchors.margins: 4
-                width: 24; height: 24
+                width: 24; height: 16
                 radius: Cfg.Config.chipRadius
                 color: root.isPinned ? Cfg.Colors.accent : (pinHover.containsMouse ? Cfg.Colors.hoverOverlay : "transparent")
                 z: 10
@@ -96,7 +99,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text: "📌"
-                    font.pixelSize: 10
+                    font.pixelSize: 9
                     color: root.isPinned ? Cfg.Colors.bg : Cfg.Colors.dim
                 }
                 MouseArea {
