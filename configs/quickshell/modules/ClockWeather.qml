@@ -72,7 +72,7 @@ RowLayout {
 
                 Behavior on width {
                     NumberAnimation {
-                        duration: Cfg.Config.animMed
+                        duration: Cfg.Config.animMed + 200 // +0.2s mais lento
                         easing.type: Easing.BezierSpline
                         easing.bezierCurve: Cfg.Config.easingEmphasized
                     }
@@ -91,7 +91,7 @@ RowLayout {
                         font.family: Cfg.Config.fontFamily
                         font.pixelSize: 12
                         opacity: clockGroup.hovered ? 1 : 0
-                        Behavior on opacity { NumberAnimation { duration: Cfg.Config.animFast; easing.type: Cfg.Config.easingFade } }
+                        Behavior on opacity { NumberAnimation { duration: Cfg.Config.animFast + 200; easing.type: Cfg.Config.easingFade } }
                     }
 
                     MouseArea {
