@@ -29,8 +29,9 @@ PanelWindow {
     screen: modelData
 
     anchors.top: true
+    anchors.left: true
+    anchors.right: true
     implicitHeight: Cfg.BarConfig.barHeight
-    implicitWidth: content.implicitWidth + Cfg.BarConfig.contentPadding * 2
     margins.top: Cfg.BarConfig.barMargin
     color: "transparent"
 
@@ -62,7 +63,15 @@ PanelWindow {
     }
 
     Rectangle {
-        anchors.fill: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        width: content.implicitWidth + Cfg.BarConfig.contentPadding * 2
+        height: Cfg.BarConfig.barHeight
+        
+        Behavior on width {
+            NumberAnimation { duration: Cfg.Config.animMed; easing.type: Easing.BezierSpline; easing.bezierCurve: Cfg.Config.easingEmphasized }
+        }
+
         radius: Cfg.BarConfig.barRadius
         topLeftRadius: 0
         topRightRadius: 0
