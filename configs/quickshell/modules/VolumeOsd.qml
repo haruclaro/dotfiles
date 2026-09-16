@@ -71,8 +71,12 @@ PanelWindow {
         id: container
         anchors.fill: parent
         opacity: osdTimer.running ? 1 : 0
+        scale: osdTimer.running ? 1 : 0.95
         Behavior on opacity {
-            NumberAnimation { duration: 200 }
+            NumberAnimation { duration: Cfg.Config.animMed; easing.type: Cfg.Config.easingFade }
+        }
+        Behavior on scale {
+            NumberAnimation { duration: Cfg.Config.animSlow; easing.type: Easing.BezierSpline; easing.bezierCurve: Cfg.Config.easingEmphasized }
         }
         radius: 12
         color: Cfg.Colors.bgElevated
@@ -111,7 +115,7 @@ PanelWindow {
                         color: Cfg.Colors.accent
                         
                         Behavior on width {
-                            NumberAnimation { duration: 150; easing.type: Easing.OutQuad }
+                            NumberAnimation { duration: Cfg.Config.animFast; easing.type: Easing.BezierSpline; easing.bezierCurve: Cfg.Config.easingEmphasized }
                         }
                     }
                 }

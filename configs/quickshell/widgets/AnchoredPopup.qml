@@ -60,18 +60,18 @@ PopupWindow {
             
             NumberAnimation on scale {
                 id: frameScaleAnim
-                from: 0.8
+                from: 0.95
                 to: 1.0
-                duration: Cfg.Config.animMed
+                duration: Cfg.Config.animSlow
                 easing.type: Easing.BezierSpline
-                easing.bezierCurve: Cfg.Config.curveFastSpatial
+                easing.bezierCurve: Cfg.Config.easingEmphasized
                 running: false
             }
             NumberAnimation on opacity {
                 id: frameOpacityAnim
                 from: 0
                 to: 1
-                duration: Cfg.Config.animFast
+                duration: Cfg.Config.animMed
                 easing.type: Cfg.Config.easingFade
                 running: false
             }
