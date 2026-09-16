@@ -10,6 +10,12 @@ Item {
     implicitWidth: 340
     implicitHeight: col.implicitHeight
 
+    function reload() {
+        if (!wallpaperListProc.running && wallpaperCandidates.length === 0) {
+            wallpaperListProc.running = true;
+        }
+    }
+
     ColorDialog {
         id: colorDialog
         title: "Escolha uma cor"
@@ -77,7 +83,7 @@ Item {
     Process {
         id: wallpaperListProc
         command: ["bash", "-c", "find ~/Pictures ~/Images ~/Imagens ~/Wallpapers ~/wallpapers ~/.wallpapers ~/.config/tema_manager/wallpapers -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) 2>/dev/null"]
-        running: true
+        running: false
         stdout: StdioCollector {
             onStreamFinished: root.wallpaperCandidates = this.text.split("\n").filter((l) => l.length > 0)
         }

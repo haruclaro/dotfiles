@@ -16,6 +16,11 @@ PanelWindow {
 
     property bool shown: false
     visible: shown
+    onShownChanged: {
+        if (shown) {
+            content.reload()
+        }
+    }
 
     implicitWidth: 400
     implicitHeight: content.implicitHeight + 70
