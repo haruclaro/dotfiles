@@ -64,6 +64,8 @@ PanelWindow {
     Rectangle {
         anchors.fill: parent
         radius: Cfg.BarConfig.barRadius
+        topLeftRadius: 0
+        topRightRadius: 0
         color: Qt.rgba(Cfg.Colors.bgSolid.r, Cfg.Colors.bgSolid.g, Cfg.Colors.bgSolid.b, root.barAlpha)
         border.color: Cfg.Colors.border
         border.width: Cfg.BarConfig.showBorder ? Cfg.BarConfig.borderWidth : 0
