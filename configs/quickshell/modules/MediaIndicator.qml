@@ -56,34 +56,46 @@ Item {
                 color: root.hasMedia ? Cfg.Colors.accent : Cfg.Colors.dim
             }
 
-            // Letreiro simples — mesma ideia do ScrollingLabel original
-            // (recorta o texto e faz ele "andar" a cada tick).
+            // Letreiro suave e contínuo (pixel-perfect) usando animação de verdade
             Item {
                 visible: root.hasMedia
                 Layout.preferredWidth: 130
                 Layout.preferredHeight: 16
                 clip: true
 
-                Text {
-                    id: marquee
-                    property string full: root.hasMedia
-                        ? ((root.activePlayer.trackArtist || "Desconhecido") + " - " + (root.activePlayer.trackTitle || "Desconhecido"))
-                        : ""
-                    property int offset: 0
-                    text: full.length <= 22 ? full : (full + "     " + full).substring(offset, offset + 22)
-                    color: Cfg.Colors.subtext
-                    font.family: Cfg.Config.monoFontFamily
-                    font.pixelSize: 11
+                Row {
+                    id: marqueeRow
+                    spacing: 30
+                    property string fullText: root.hasMedia ? ((root.activePlayer.trackArtist || "Desconhecido") + " - " + (root.activePlayer.trackTitle || "Desconhecido")) : ""
+                    property bool shouldScroll: text1.implicitWidth > 130
+                    x: 0
+
+                    Text {
+                        id: text1
+                        text: parent.fullText
+                        color: Cfg.Colors.subtext
+                        font.family: Cfg.Config.monoFontFamily
+                        font.pixelSize: 11
+                    }
+                    Text {
+                        text: parent.fullText
+                        color: Cfg.Colors.subtext
+                        font.family: Cfg.Config.monoFontFamily
+                        font.pixelSize: 11
+                        visible: parent.shouldScroll
+                    }
+                    
+                    // Velocidade baseada na largura (distância). Para ficar mais lento, aumentamos o tempo (multiplicador).
+                    NumberAnimation on x {
+                        from: 0
+                        to: -(text1.implicitWidth + 30) // a largura de um ciclo completo
+                        duration: (text1.implicitWidth + 30) * 50 // 50ms por pixel (mais lento e suave)
+                        loops: Animation.Infinite
+                        running: root.hasMedia && marqueeRow.shouldScroll
+                    }
                 }
             }
         }
-    }
-
-    Timer {
-        interval: 200
-        running: root.hasMedia && marquee.full.length > 22
-        repeat: true
-        onTriggered: marquee.offset = (marquee.offset + 1) % (marquee.full.length + 5)
     }
 
     MouseArea {

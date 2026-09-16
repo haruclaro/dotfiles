@@ -36,21 +36,14 @@ RowLayout {
     // --- Relógio + data revelada no hover ---
     Item {
         id: clockGroup
-        implicitWidth: dateReveal.width + clockText.implicitWidth + 6
+        implicitWidth: row.implicitWidth
         implicitHeight: Cfg.BarConfig.barHeight - 8
 
         readonly property bool hovered: clockHover.containsMouse || dateHover.containsMouse
 
-        Behavior on implicitWidth {
-            NumberAnimation {
-                duration: Cfg.Config.animMed
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Cfg.Config.easingEmphasized
-            }
-        }
-
-        RowLayout {
-            anchors.fill: parent
+        Row {
+            id: row
+            anchors.centerIn: parent
             spacing: 6
             layoutDirection: Qt.RightToLeft   // clockText fica fixo à direita, data "nasce" à esquerda
 
@@ -61,6 +54,7 @@ RowLayout {
                 font.family: Cfg.Config.fontFamily
                 font.bold: true
                 font.pixelSize: 13
+                anchors.verticalCenter: parent.verticalCenter
 
                 MouseArea {
                     id: clockHover
@@ -72,11 +66,11 @@ RowLayout {
 
             Item {
                 id: dateReveal
-                implicitWidth: clockGroup.hovered ? dateLabel.implicitWidth + 8 : 0
-                implicitHeight: parent.height
+                width: clockGroup.hovered ? dateLabel.implicitWidth + 8 : 0
+                height: parent.height
                 clip: true
 
-                Behavior on implicitWidth {
+                Behavior on width {
                     NumberAnimation {
                         duration: Cfg.Config.animMed
                         easing.type: Easing.BezierSpline
