@@ -47,6 +47,34 @@ Item {
     readonly property bool canSave: themeName.trim().length > 0 && wallpaperPath.trim().length > 0
 
     Process {
+        id: paletteProc
+        command: ["bash", "-c", "python3 ~/.config/quickshell/scripts/extract_palette.py '" + root.wallpaperPath + "'"]
+        running: false
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    let parsed = JSON.parse(this.text)
+                    if (parsed.fundo) {
+                        root.fundo = parsed.fundo
+                        root.superficie = parsed.superficie
+                        root.base = parsed.base
+                        root.destaque1 = parsed.destaque1
+                        root.destaque2 = parsed.destaque2
+                        root.texto = parsed.texto
+                    }
+                } catch(e) {}
+            }
+        }
+    }
+
+    onWallpaperPathChanged: {
+        if (wallpaperPath.length > 0) {
+            paletteProc.running = false
+            paletteProc.command = ["bash", "-c", "python3 ~/.config/quickshell/scripts/extract_palette.py '" + root.wallpaperPath + "'"]
+            paletteProc.running = true
+        }
+    }
+    Process {
         id: wallpaperListProc
         command: ["bash", "-c", "find ~/Pictures ~/Images ~/Imagens ~/Wallpapers ~/wallpapers ~/.wallpapers ~/.config/tema_manager/wallpapers -type f \\( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \\) 2>/dev/null"]
         running: true
