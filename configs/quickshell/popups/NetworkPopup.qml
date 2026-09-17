@@ -8,7 +8,7 @@ import "../widgets" as Widgets
 Item {
     id: root
     implicitWidth: 320
-    implicitHeight: col.implicitHeight
+    implicitHeight: 380
 
     // Filtra redes com SSID vazio ou repetido (só mostra a mais forte)
     readonly property var filteredNetworks: {
@@ -24,19 +24,28 @@ Item {
         return Object.values(unique).sort((a, b) => b.strength - a.strength)
     }
 
+    property string errorMsg: ""
+    property bool requiresPassword: false
     property string selectedSsid: ""
     property string selectedBssid: ""
-    property bool requiresPassword: false
-    property string errorMsg: ""
     property bool connecting: false
 
     ColumnLayout {
         id: col
-        width: parent.width
-        spacing: 14
+        anchors.fill: parent
+        anchors.margins: 16
+        spacing: 12
 
+        // Header
         RowLayout {
             Layout.fillWidth: true
+            spacing: 8
+            
+            Widgets.SymbolicIcon {
+                name: Cfg.Icons.wifi
+                width: 16; height: 16
+                color: Cfg.Colors.subtext
+            }
             Text {
                 text: "Redes Wi-Fi"
                 color: Cfg.Colors.subtext
@@ -45,91 +54,13 @@ Item {
                 Layout.fillWidth: true
             }
             
-            Rectangle {
-                width: 32; height: 18; radius: 9
-                color: Services.Network.wifiEnabled ? Cfg.Colors.accent : Cfg.Colors.border
-                Rectangle {
-                    width: 14; height: 14; radius: 7; color: Cfg.Colors.bg
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: Services.Network.wifiEnabled ? parent.width - width - 2 : 2
-                    Behavior on x { NumberAnimation { duration: 150 } }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: Services.Network.setWifiEnabled(!Services.Network.wifiEnabled)
-                }
+            Widgets.Switch {
+                checked: Services.Network.wifiEnabled
+                onClicked: Services.Network.setWifiEnabled(!Services.Network.wifiEnabled)
             }
         }
 
         Rectangle { Layout.fillWidth: true; height: 1; color: Cfg.Colors.divider }
-
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: 8
-            visible: Services.Network.wifiEnabled
-            
-            Repeater {
-                model: root.filteredNetworks
-                delegate: Rectangle {
-                    Layout.fillWidth: true
-                    height: 40
-                    radius: 6
-                    color: modelData.active ? Cfg.Colors.border : (mouseArea.containsMouse ? Qt.darker(Cfg.Colors.border, 1.2) : "transparent")
-                    
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 10
-                        
-                        Widgets.SymbolicIcon {
-                            name: modelData.strength > 75 ? Cfg.Icons.wifiHigh : (modelData.strength > 30 ? Cfg.Icons.wifiMedium : Cfg.Icons.wifiLow)
-                            width: 16; height: 16
-                            color: modelData.active ? Cfg.Colors.accent : Cfg.Colors.text
-                        }
-                        
-                        Text {
-                            text: modelData.ssid
-                            color: modelData.active ? Cfg.Colors.accent : Cfg.Colors.text
-                            font.pixelSize: 12
-                            font.bold: modelData.active
-                            Layout.fillWidth: true
-                            elide: Text.ElideRight
-                        }
-                        
-                        Widgets.SymbolicIcon {
-                            visible: modelData.isSecure
-                            name: Cfg.Icons.lock
-                            width: 12; height: 12
-                            color: Cfg.Colors.subtext
-                        }
-                    }
-                    
-                    MouseArea {
-                        id: mouseArea
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: {
-                            if (!modelData.active) {
-                                root.errorMsg = ""
-                                root.requiresPassword = false
-                                root.selectedSsid = modelData.ssid
-                                root.selectedBssid = modelData.bssid
-                                root.connecting = true
-                                
-                                Services.Network.connectToNetworkWithPasswordCheck(modelData.ssid, modelData.isSecure, function(res) {
-                                    root.connecting = false
-                                    if (res.needsPassword) {
-                                        root.requiresPassword = true
-                                    } else if (!res.success) {
-                                        root.errorMsg = "Falha ao conectar."
-                                    }
-                                }, modelData.bssid)
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         // Senha Input Field
         ColumnLayout {
@@ -203,6 +134,80 @@ Item {
             }
         }
 
+        ScrollView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: Services.Network.wifiEnabled && !root.requiresPassword
+            clip: true
+            
+            ColumnLayout {
+                width: parent.width
+                spacing: 8
+                
+                Repeater {
+                    model: root.filteredNetworks
+                    delegate: Rectangle {
+                        Layout.fillWidth: true
+                        height: 40
+                        radius: 6
+                        color: modelData.active ? Cfg.Colors.border : (mouseArea.containsMouse ? Qt.darker(Cfg.Colors.border, 1.2) : "transparent")
+                        
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            spacing: 10
+                            
+                            Widgets.SymbolicIcon {
+                                name: modelData.strength > 75 ? Cfg.Icons.wifiHigh : (modelData.strength > 30 ? Cfg.Icons.wifiMedium : Cfg.Icons.wifiLow)
+                                width: 16; height: 16
+                                color: modelData.active ? Cfg.Colors.accent : Cfg.Colors.text
+                            }
+                            
+                            Text {
+                                text: modelData.ssid
+                                color: modelData.active ? Cfg.Colors.accent : Cfg.Colors.text
+                                font.pixelSize: 12
+                                font.bold: modelData.active
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                            }
+                            
+                            Widgets.SymbolicIcon {
+                                visible: modelData.isSecure
+                                name: Cfg.Icons.lock
+                                width: 12; height: 12
+                                color: Cfg.Colors.subtext
+                            }
+                        }
+                        
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: {
+                                if (!modelData.active) {
+                                    root.errorMsg = ""
+                                    root.requiresPassword = false
+                                    root.selectedSsid = modelData.ssid
+                                    root.selectedBssid = modelData.bssid
+                                    root.connecting = true
+                                    
+                                    Services.Network.connectToNetworkWithPasswordCheck(modelData.ssid, modelData.isSecure, function(res) {
+                                        root.connecting = false
+                                        if (res.needsPassword) {
+                                            root.requiresPassword = true
+                                        } else if (!res.success) {
+                                            root.errorMsg = "Falha ao conectar."
+                                        }
+                                    }, modelData.bssid)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         Text {
             visible: root.errorMsg !== ""
             text: root.errorMsg
@@ -225,6 +230,8 @@ Item {
             color: Cfg.Colors.dim
             font.italic: true
             Layout.alignment: Qt.AlignHCenter
+            Layout.fillHeight: true
+            verticalAlignment: Text.AlignVCenter
         }
         
         Text {
@@ -233,6 +240,8 @@ Item {
             color: Cfg.Colors.dim
             font.italic: true
             Layout.alignment: Qt.AlignHCenter
+            Layout.fillHeight: true
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }
