@@ -75,7 +75,7 @@ PanelWindow {
         border.color: Cfg.Colors.border
         border.width: Cfg.BarConfig.showBorder ? Cfg.BarConfig.borderWidth : 0
 
-        RowLayout {
+        Row {
             id: content
             anchors.centerIn: parent
             spacing: Cfg.BarConfig.itemSpacing
@@ -83,7 +83,7 @@ PanelWindow {
             Repeater {
                 model: Cfg.BarConfig.topEnabledIds
                 delegate: Loader {
-                    Layout.alignment: Qt.AlignVCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     sourceComponent: root.itemById(modelData)
                 }
             }
