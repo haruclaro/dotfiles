@@ -86,8 +86,8 @@ RowLayout {
                     Text {
                         id: dateLabel
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right
-                        anchors.rightMargin: 4
+                        anchors.left: parent.left
+                        anchors.leftMargin: 4
                         text: root.dateText
                         color: Cfg.Colors.subtext
                         font.family: Cfg.Config.fontFamily
