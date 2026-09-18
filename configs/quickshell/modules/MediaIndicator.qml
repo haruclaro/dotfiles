@@ -29,7 +29,7 @@ Item {
     readonly property bool hasMedia: activePlayer !== null
 
     implicitHeight: Cfg.BarConfig.barHeight - 8
-    implicitWidth: hasMedia ? 190 : 30
+    implicitWidth: hasMedia ? 166 : 30 // 130 (letreiro) + 6 (spacing) + 14 (ícone) + 16 (padding) = 166
 
     Behavior on implicitWidth {
         NumberAnimation {
@@ -47,6 +47,7 @@ Item {
         clip: true
 
         RowLayout {
+            id: contentRow
             anchors.centerIn: parent
             spacing: 6
 

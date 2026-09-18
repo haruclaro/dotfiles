@@ -55,6 +55,7 @@ Row {
                 font.family: Cfg.Config.fontFamily
                 font.bold: true
                 font.pixelSize: 13
+                rightPadding: 8
                 anchors.verticalCenter: parent.verticalCenter
 
                 MouseArea {
