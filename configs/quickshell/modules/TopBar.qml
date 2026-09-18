@@ -51,13 +51,11 @@ PanelWindow {
     // que um Loader os carregue.
     Component { id: compResource; ResourceIndicator {} }
     Component { id: compClock; ClockWeather {} }
-    Component { id: compMedia; MediaIndicator {} }
 
     function itemById(id) {
         switch (id) {
             case "resource": return compResource
             case "clock": return compClock
-            case "media": return compMedia
             default: return null
         }
     }

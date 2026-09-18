@@ -10,7 +10,7 @@ import "../popups" as Popups
 // agora como peça única central da TopBar. PEDIDO NOVO: passar o mouse
 // sobre o relógio expande a data PARA A ESQUERDA (não é mais um botão de
 // data sempre visível); clicar na data (já expandida) abre o calendário.
-RowLayout {
+Row {
     id: root
     spacing: 8
 
@@ -36,6 +36,7 @@ RowLayout {
     // --- Relógio + data revelada no hover ---
     Item {
         id: clockGroup
+        anchors.verticalCenter: parent.verticalCenter
         implicitWidth: row.implicitWidth
         implicitHeight: Cfg.BarConfig.barHeight - 8
 
@@ -114,7 +115,7 @@ RowLayout {
         contentComponent: Popups.CalendarPopup {}
     }
 
-    Rectangle { width: 1; height: 14; color: Cfg.Colors.divider }
+    Rectangle { width: 1; height: 14; color: Cfg.Colors.divider; anchors.verticalCenter: parent.verticalCenter }
 
     // --- Clima (lógica igual à original em Bar.tsx) ---
     //
@@ -130,6 +131,7 @@ RowLayout {
     // separados) e services/Weather.qml.
     Rectangle {
         id: weatherBtn
+        anchors.verticalCenter: parent.verticalCenter
         implicitWidth: weatherRow.implicitWidth + 16
         implicitHeight: Cfg.BarConfig.barHeight - 8
         radius: Cfg.Config.chipRadius
@@ -180,5 +182,17 @@ RowLayout {
         id: weatherLocationPopup
         anchorItem: weatherBtn
         contentComponent: Popups.WeatherLocationPopup {}
+    }
+
+    Rectangle { 
+        width: 1; height: 14; color: Cfg.Colors.divider; 
+        anchors.verticalCenter: parent.verticalCenter 
+        visible: mediaLoader.status === Loader.Ready && mediaLoader.item.hasMedia 
+    }
+
+    Loader {
+        id: mediaLoader
+        anchors.verticalCenter: parent.verticalCenter
+        sourceComponent: Component { MediaIndicator {} }
     }
 }
