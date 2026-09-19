@@ -69,7 +69,31 @@ Item {
                     spacing: 30
                     property string fullText: root.hasMedia ? ((root.activePlayer.trackArtist || "Desconhecido") + " - " + (root.activePlayer.trackTitle || "Desconhecido")) : ""
                     property bool shouldScroll: text1.implicitWidth > 130
+                    
                     x: 0
+
+                    onFullTextChanged: {
+                        xAnim.stop()
+                        x = 0
+                        if (shouldScroll && root.hasMedia) {
+                            xAnim.restart()
+                        }
+                    }
+
+                    onShouldScrollChanged: {
+                        if (!shouldScroll) {
+                            xAnim.stop()
+                            x = 0
+                        } else if (root.hasMedia) {
+                            xAnim.restart()
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        if (shouldScroll && root.hasMedia) {
+                            xAnim.start()
+                        }
+                    }
 
                     Text {
                         id: text1
@@ -86,13 +110,14 @@ Item {
                         visible: parent.shouldScroll
                     }
                     
-                    // Velocidade baseada na largura (distância). Para ficar mais lento, aumentamos o tempo (multiplicador).
-                    NumberAnimation on x {
+                    NumberAnimation {
+                        id: xAnim
+                        target: marqueeRow
+                        property: "x"
                         from: 0
-                        to: -(text1.implicitWidth + 30) // a largura de um ciclo completo
-                        duration: (text1.implicitWidth + 30) * 50 // 50ms por pixel (mais lento e suave)
+                        to: -(text1.implicitWidth + 30)
+                        duration: (text1.implicitWidth + 30) * 50
                         loops: Animation.Infinite
-                        running: root.hasMedia && marqueeRow.shouldScroll
                     }
                 }
             }
