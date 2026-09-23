@@ -10,15 +10,20 @@ Item {
     implicitWidth: 320
     implicitHeight: 380
 
+    // Filtra dispositivos e os ordena: conectados primeiro, depois os com nome
     readonly property var btDevices: {
-        if (!Bluetooth.defaultAdapter) return []
-        const devs = Bluetooth.defaultAdapter.devices.values
-        devs.sort((a, b) => {
-            if (a.connected !== b.connected) return a.connected ? -1 : 1
-            if (a.paired !== b.paired) return a.paired ? -1 : 1
+        const list = []
+        for (let i = 0; i < Bluetooth.devices.values.length; i++) {
+            const dev = Bluetooth.devices.values[i]
+            if (dev.name && dev.name.trim() !== "") {
+                list.push(dev)
+            }
+        }
+        return list.sort((a, b) => {
+            if (a.connected && !b.connected) return -1
+            if (!a.connected && b.connected) return 1
             return a.name.localeCompare(b.name)
         })
-        return devs
     }
 
     ColumnLayout {
